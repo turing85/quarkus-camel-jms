@@ -10,16 +10,12 @@ quarkus:
   datasource:
     camel:
       db-kind: postgresql
-      username: application
-      password: application
+      username: ${DB_USERNAME:application}
+      password: ${DB_PASSWORD:application}
       jdbc:
-        url: jdbc:postgresql://localhost:5432/application
+        url: jdbc:postgresql://${DB_HOST:localhost:5432}/${DB_NAME:application}
         max-size: 16
         transactions: xa
-  qpid-jms:
-    url: amqp://${amqp-host}:${amqp-port}
-    username: ${amqp-username}
-    password: ${amqp-password}
 mp:
   messaging:
     outgoing:
