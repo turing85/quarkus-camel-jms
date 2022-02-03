@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 public class Producer {
 
   private static final Logger LOG = LoggerFactory.getLogger(Producer.class);
-  private static final Random random = new Random();
+  private static final Random RANDOM = new Random();
 
   @Outgoing("out")
   public Multi<String> send() {
     return Multi.createFrom().ticks().every(Duration.ofSeconds(1))
-        .map(x -> random.nextInt(1000))
+        .map(x -> RANDOM.nextInt(1000))
         .map("Hello %d"::formatted)
         .invoke(Producer::log);
   }
