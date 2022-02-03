@@ -20,7 +20,7 @@ public class JmsRoute extends RouteBuilder {
   @Override
   public void configure() {
     from(
-        jms("queue:out::in")
+        jms("topic:out::in")
             .connectionFactory(xaConnectionFactory)
             .clientId("camel-consumer")
             .subscriptionName("camel-consumer-sub")
