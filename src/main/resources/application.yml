@@ -1,0 +1,30 @@
+amqp-host: localhost
+amqp-port: 5672
+amqp-username: artemis
+amqp-password: artemis
+quarkus:
+  artemis:
+    url: tcp://${amqp-host}:61616
+    username: ${amqp-username}
+    password: ${amqp-password}
+  datasource:
+    camel:
+      db-kind: postgresql
+      username: application
+      password: application
+      jdbc:
+        url: jdbc:postgresql://localhost:5432/application
+        max-size: 16
+        transactions: xa
+  qpid-jms:
+    url: amqp://${amqp-host}:${amqp-port}
+    username: ${amqp-username}
+    password: ${amqp-password}
+mp:
+  messaging:
+    outgoing:
+      out:
+        connector: smallrye-amqp
+        container-id: producer
+        durable: true
+        use-anonymous-sender: false
