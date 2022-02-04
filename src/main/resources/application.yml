@@ -2,6 +2,12 @@ amqp-host: localhost
 amqp-port: 5672
 amqp-username: artemis
 amqp-password: artemis
+"%dev":
+   quarkus:
+     flyway:
+       camel:
+         location: db/camel/migration
+         migrate-at-start: true
 quarkus:
   artemis:
     url: tcp://${amqp-host}:61616

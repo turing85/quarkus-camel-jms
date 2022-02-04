@@ -14,7 +14,6 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>2.7.0.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-    <flyway-plugin.version>8.4.4</flyway-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -38,6 +37,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-flyway</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -81,14 +84,6 @@
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-maven-plugin</artifactId>
-        <version>${flyway-plugin.version}</version>
-        <configuration>
-          <configFiles>src/main/resources/db/config/local.conf</configFiles>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
