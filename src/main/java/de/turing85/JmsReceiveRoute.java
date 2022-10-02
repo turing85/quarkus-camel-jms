@@ -40,8 +40,16 @@ public class JmsReceiveRoute extends RouteBuilder {
         .routeId("message-receiver")
         .transacted(TransactedDefinition.PROPAGATION_REQUIRED)
         .log(LoggingLevel.INFO, "Received: ${body}")
-        .to(sql("INSERT INTO data(data) VALUES(:#${body});")
-            .dataSource(dataSource))
+        .circuitBreaker()
+            .faultToleranceConfiguration()
+                .timeoutEnabled(true)
+                .timeoutDuration(5000)
+                .failureRatio(50)
+                .successThreshold(75)
+            .end()
+            .to(sql("INSERT INTO data(data) VALUES(:#${body});")
+                .dataSource(dataSource))
+        .endCircuitBreaker()
         .log(LoggingLevel.INFO, "Inserted: ${body}");
   }
 }

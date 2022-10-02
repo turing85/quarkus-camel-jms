@@ -22,9 +22,6 @@ quarkus:
     pooling:
       enabled: true
     max-connections: 2
-
-  transaction-manager:
-    enable-recovery: true
 camel:
   send-route:
-    period: PT5S
+    period: PT0.5S
