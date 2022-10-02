@@ -1,32 +1,30 @@
-amqp-host: localhost
-amqp-port: 5672
-amqp-username: artemis
-amqp-password: artemis
-"%dev":
-   quarkus:
-     flyway:
-       camel:
-         location: db/camel/migration
-         migrate-at-start: true
 quarkus:
   artemis:
-    url: tcp://${amqp-host}:61616
-    username: ${amqp-username}
-    password: ${amqp-password}
+    url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
+    username: ${ARTEMIS_USERNAME:artemis}
+    password: ${ARTEMIS_PASSWORD:artemis}
   datasource:
-    camel:
+    db-kind: postgresql
+    devservices:
+      enabled: false
+    data:
       db-kind: postgresql
       username: ${DB_USERNAME:application}
       password: ${DB_PASSWORD:application}
       jdbc:
         url: jdbc:postgresql://${DB_HOST:localhost:5432}/${DB_NAME:application}
-        max-size: 16
+        max-size: 4
         transactions: xa
-mp:
-  messaging:
-    outgoing:
-      out:
-        connector: smallrye-amqp
-        container-id: producer
-        durable: true
-        use-anonymous-sender: false
+  flyway:
+    data:
+      migrate-at-start: true
+  pooled-jms:
+    pooling:
+      enabled: true
+    max-connections: 2
+
+  transaction-manager:
+    enable-recovery: true
+camel:
+  send-route:
+    period: PT5S

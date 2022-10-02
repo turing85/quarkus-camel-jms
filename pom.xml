@@ -6,84 +6,60 @@
   <artifactId>quarkus-camel-jms</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.release>17</maven.compiler.release>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Plugins -->
+    <antrun-plugin.version>3.1.0</antrun-plugin.version>
+    <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
+    <flyway-plugin.version>8.4.4</flyway-plugin.version>
+
+    <!-- Quarkus -->
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>2.7.0.Final</quarkus.platform.version>
-    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+    <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+    <quarkus.platform.version>2.13.0.Final</quarkus.platform.version>
+    <quarkus.package.type>fast-jar</quarkus.package.type>
+
+    <!-- Camel Quarkus -->
+    <camel-quarkus-platform.group-id>io.quarkus.platform</camel-quarkus-platform.group-id>
+    <camel-quarkus.group-id>org.apache.camel.quarkus</camel-quarkus.group-id>
+    <quarkus-camel-platform.artifact-id>quarkus-camel-bom</quarkus-camel-platform.artifact-id>
+
+    <!-- Quarkiverse -->
+    <quarkus-artemis-jms.version>1.2.0</quarkus-artemis-jms.version>
+    <quarkus-pooled-jms.version>1.0.2</quarkus-pooled-jms.version>
   </properties>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>${quarkus.platform.artifact-id}</artifactId>
-        <version>${quarkus.platform.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>quarkus-camel-bom</artifactId>
-        <version>${quarkus.platform.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-config-yaml</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-flyway</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkiverse.artemis</groupId>
-      <artifactId>quarkus-artemis-jms</artifactId>
-      <version>1.0.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.geronimo.specs</groupId>
-          <artifactId>geronimo-jms_2.0_spec</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-jms</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-jta</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-jdbc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-postgresql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
-    </dependency>
-  </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>${antrun-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>create-emptydir</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <mkdir dir="${project.build.directory}/emptydir"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>${flyway-plugin.version}</version>
+        <configuration>
+          <configFiles>src/main/resources/db/config/local.conf</configFiles>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -120,6 +96,75 @@
       </plugin>
     </plugins>
   </build>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>${camel-quarkus-platform.group-id}</groupId>
+        <artifactId>${quarkus-camel-platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <!-- Quarkus -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${quarkus.platform.group-id}</groupId>
+      <artifactId>quarkus-flyway</artifactId>
+    </dependency>
+
+    <!---Camel Quarkus -->
+    <dependency>
+      <groupId>${camel-quarkus.group-id}</groupId>
+      <artifactId>camel-quarkus-core</artifactId>
+    </dependency>
+    <!-- XA Transaction setup -->
+    <dependency>
+      <groupId>${camel-quarkus.group-id}</groupId>
+      <artifactId>camel-quarkus-jta</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkiverse.messaginghub</groupId>
+      <artifactId>quarkus-pooled-jms</artifactId>
+      <version>${quarkus-pooled-jms.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkiverse.artemis</groupId>
+      <artifactId>quarkus-artemis-jms</artifactId>
+      <version>${quarkus-artemis-jms.version}</version>
+    </dependency>
+
+    <!-- Camel modules -->
+    <dependency>
+      <groupId>${camel-quarkus.group-id}</groupId>
+      <artifactId>camel-quarkus-timer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${camel-quarkus.group-id}</groupId>
+      <artifactId>camel-quarkus-jms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${camel-quarkus.group-id}</groupId>
+      <artifactId>camel-quarkus-sql</artifactId>
+    </dependency>
+  </dependencies>
+
   <profiles>
     <profile>
       <id>native</id>
