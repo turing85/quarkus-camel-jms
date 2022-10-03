@@ -17,14 +17,14 @@ public class JmsSendRoute extends RouteBuilder {
   private final Duration period;
   private final AtomicInteger counter;
 
-  public JmsSendRoute(
-      @ConfigProperty(name = "camel.send-route.period") Duration period) {
+  public JmsSendRoute(@ConfigProperty(name = "camel.send-route.period") Duration period) {
     this.period = period;
     this.counter = new AtomicInteger();
   }
 
   @Override
   public void configure() {
+    // @formatter:off
     from(
         timer("sender-timer")
             .fixedRate(true)
@@ -36,5 +36,6 @@ public class JmsSendRoute extends RouteBuilder {
         .to(jms("queue:numbers")
             .clientId("camel-sender"))
         .log("Sent: ${body}");
+    // @formatter:on
   }
 }
