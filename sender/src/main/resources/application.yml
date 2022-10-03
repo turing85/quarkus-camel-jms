@@ -1,0 +1,14 @@
+quarkus:
+  artemis:
+    url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
+    username: ${ARTEMIS_USERNAME:artemis}
+    password: ${ARTEMIS_PASSWORD:artemis}
+  pooled-jms:
+    pooling:
+      enabled: true
+    max-connections: 2
+    xa:
+      enabled: true
+camel:
+  send-route:
+    period: PT5S

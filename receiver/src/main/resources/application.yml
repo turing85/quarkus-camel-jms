@@ -17,11 +17,11 @@ quarkus:
         transactions: xa
   flyway:
     data:
+      locations: db/camel/migration
       migrate-at-start: true
   pooled-jms:
     pooling:
       enabled: true
     max-connections: 2
-camel:
-  send-route:
-    period: PT0.5S
+    xa:
+      enabled: true

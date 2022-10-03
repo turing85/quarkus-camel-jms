@@ -33,9 +33,8 @@ public class JmsSendRoute extends RouteBuilder {
         .setBody(exchange -> counter.getAndIncrement())
         .setHeader(COUNTER_HEADER_NAME, body().getExpression())
         .log(LoggingLevel.INFO, "Body: ${body}")
-        .to(jms("queue:out::in")
-            .clientId("camel-producer")
-            .transacted(true))
+        .to(jms("queue:numbers")
+            .clientId("camel-sender"))
         .log("Sent: ${body}");
   }
 }

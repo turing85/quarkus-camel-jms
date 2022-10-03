@@ -7,9 +7,9 @@
         </address-settings>
 
         <addresses>
-            <address name="out">
+            <address name="numbers">
                 <anycast>
-                    <queue name="in"/>
+                    <queue name="numbers"/>
                 </anycast>
             </address>
         </addresses>

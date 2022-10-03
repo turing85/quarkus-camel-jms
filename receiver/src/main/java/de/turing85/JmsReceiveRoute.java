@@ -5,11 +5,13 @@ import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
 
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.agroal.DataSource;
+import java.time.Duration;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.TransactedDefinition;
+import org.apache.camel.throttling.ThrottlingExceptionRoutePolicy;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @ApplicationScoped
@@ -30,26 +32,28 @@ public class JmsReceiveRoute extends RouteBuilder {
 
   @Override
   public void configure() {
+    final ThrottlingExceptionRoutePolicy policy = new ThrottlingExceptionRoutePolicy(
+        1,
+        Duration.ofSeconds(30).toMillis(),
+        Duration.ofSeconds(10).toMillis(),
+        List.of(Throwable.class));
+    // @formatter:off
     from(
-        jms("queue:out")
-            .subscriptionShared(true)
-            .durableSubscriptionName("in")
-            .transacted(true)
+        jms("queue:numbers")
+            .clientId("camel-receiver")
             .advanced()
                 .transactionManager(globalPlatformTransactionManager))
         .routeId("message-receiver")
-        .transacted(TransactedDefinition.PROPAGATION_REQUIRED)
+        .routePolicy(policy)
+        .log(policy.dumpState())
         .log(LoggingLevel.INFO, "Received: ${body}")
-        .circuitBreaker()
-            .faultToleranceConfiguration()
-                .timeoutEnabled(true)
-                .timeoutDuration(5000)
-                .failureRatio(50)
-                .successThreshold(75)
-            .end()
-            .to(sql("INSERT INTO data(data) VALUES(:#${body});")
-                .dataSource(dataSource))
-        .endCircuitBreaker()
-        .log(LoggingLevel.INFO, "Inserted: ${body}");
+            .doTry()
+                .to(sql("INSERT INTO data(data) VALUES(:#${body});")
+                    .dataSource(dataSource))
+                .log(LoggingLevel.INFO, "Inserted: ${body}")
+            .doCatch(Exception.class)
+                .markRollbackOnly()
+            .end();
+    // @formatter:on
   }
 }

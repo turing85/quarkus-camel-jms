@@ -28,16 +28,34 @@ services:
     environment:
       ARTEMIS_USERNAME: artemis
       ARTEMIS_PASSWORD: artemis
-  #service
-  service:
+  #services
+  sender:
     profiles:
-      - service
+      - services
     build:
-      context: ../.
-      dockerfile: dockerfiles/Dockerfile.quarkus-ubi
+      context: ../sender
+      dockerfile: ../dockerfiles/Dockerfile.distroless
     ports:
       - "8080:8080"
-    env_file: service/.env
+    env_file: services/sender/.env
+    deploy:
+      resources:
+        limits:
+          memory: 80m
+        reservations:
+          memory: 100m
+    depends_on:
+      - artemis
+      - postgres
+  receiver:
+    profiles:
+      - services
+    build:
+      context: ../receiver
+      dockerfile: ../dockerfiles/Dockerfile.distroless
+    ports:
+      - "8080:8080"
+    env_file: services/sender/.env
     deploy:
       resources:
         limits:
