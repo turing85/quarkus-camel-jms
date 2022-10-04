@@ -39,13 +39,15 @@ public class JmsReceiveRoute extends RouteBuilder {
   @Override
   public void configure() {
     errorHandler(jtaTransactionErrorHandler());
+
     final ThrottlingExceptionRoutePolicy policy = new ThrottlingExceptionRoutePolicy(
         1,
         Duration.ofSeconds(1).toMillis(),
-        Duration.ofSeconds(10).toMillis(),
+        Duration.ofSeconds(30).toMillis(),
         List.of(Throwable.class));
-    // @formatter:off
     policy.start();
+
+    // @formatter:off
     from(jms("queue:numbers")
             .connectionFactory(connectionFactory)
             .clientId("camel-receiver")
