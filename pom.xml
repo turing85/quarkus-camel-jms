@@ -145,15 +145,15 @@
             <artifactId>quarkus-config-yaml</artifactId>
         </dependency>
 
-        <!---Camel Quarkus -->
+        <!-- Camel Quarkus -->
+        <!-- Commons -->
         <dependency>
-            <groupId>${camel-quarkus.group-id}</groupId>
-            <artifactId>camel-quarkus-core</artifactId>
+            <groupId>org.apache.camel.quarkus</groupId>
+            <artifactId>camel-quarkus-microprofile-health</artifactId>
         </dependency>
-        <!-- XA Transaction setup -->
         <dependency>
-            <groupId>${camel-quarkus.group-id}</groupId>
-            <artifactId>camel-quarkus-jta</artifactId>
+            <groupId>org.apache.camel.quarkus</groupId>
+            <artifactId>camel-quarkus-microprofile-metrics</artifactId>
         </dependency>
 
         <!-- JMS Setup -->
@@ -168,6 +168,14 @@
         </dependency>
 
         <!-- Camel modules -->
+        <dependency>
+            <groupId>${camel-quarkus.group-id}</groupId>
+            <artifactId>camel-quarkus-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${camel-quarkus.group-id}</groupId>
+            <artifactId>camel-quarkus-jta</artifactId>
+        </dependency>
         <dependency>
             <groupId>${camel-quarkus.group-id}</groupId>
             <artifactId>camel-quarkus-jms</artifactId>

@@ -1,4 +1,11 @@
+camel:
+  context:
+    name: ${quarkus.application.name}
+  send-route:
+    period: PT5S
 quarkus:
+  application:
+    name: jms-sender
   artemis:
     url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
     username: ${ARTEMIS_USERNAME:artemis}
@@ -9,6 +16,3 @@ quarkus:
     max-connections: 2
     xa:
       enabled: true
-camel:
-  send-route:
-    period: PT5S

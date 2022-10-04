@@ -12,7 +12,6 @@ import javax.inject.Named;
 import javax.jms.ConnectionFactory;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.TransactedDefinition;
 import org.apache.camel.throttling.ThrottlingExceptionRoutePolicy;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -38,37 +37,22 @@ public class JmsReceiveRoute extends RouteBuilder {
 
   @Override
   public void configure() {
-    errorHandler(jtaTransactionErrorHandler());
-
-    final ThrottlingExceptionRoutePolicy policy = new ThrottlingExceptionRoutePolicy(
-        1,
-        Duration.ofSeconds(1).toMillis(),
-        Duration.ofSeconds(30).toMillis(),
-        List.of(Throwable.class));
-    policy.start();
-
     // @formatter:off
     from(jms("queue:numbers")
             .connectionFactory(connectionFactory)
             .clientId("camel-receiver")
             .advanced()
                 .transactionManager(globalPlatformTransactionManager))
-        .routePolicy(policy)
+        .routePolicy(new ThrottlingExceptionRoutePolicy(
+            1,
+            Duration.ofSeconds(1).toMillis(),
+            Duration.ofSeconds(10).toMillis(),
+            List.of(Throwable.class)))
         .routeId("message-receiver")
-        .transacted(TransactedDefinition.PROPAGATION_REQUIRED)
-        .log("policy is started: %b".formatted(policy.isStarted()))
-        .log(policy.dumpState())
         .log(LoggingLevel.INFO, "Received: ${body}")
         .to(sql("INSERT INTO data(data) VALUES(:#${body});")
             .dataSource(dataSource))
-        .throwException(new MyException())
         .log(LoggingLevel.INFO, "Inserted: ${body}");
     // @formatter:on
-  }
-
-  static class MyException extends Exception {
-    MyException() {
-      super("foo");
-    }
   }
 }

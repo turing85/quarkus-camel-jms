@@ -1,4 +1,9 @@
+camel:
+  context:
+    name: ${quarkus.application.name}
 quarkus:
+  application:
+    name: jms-receiver
   artemis:
     url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
     username: ${ARTEMIS_USERNAME:artemis}
@@ -19,6 +24,8 @@ quarkus:
     data:
       locations: db/camel/migration
       migrate-at-start: true
+  http:
+    port: 8081
   pooled-jms:
     pooling:
       enabled: true
