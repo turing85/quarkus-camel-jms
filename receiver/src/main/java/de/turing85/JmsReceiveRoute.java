@@ -1,10 +1,8 @@
 package de.turing85;
 
+import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.jdbc;
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.jms;
-import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
 
-import io.agroal.api.AgroalDataSource;
-import io.quarkus.agroal.DataSource;
 import java.time.Duration;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -19,20 +17,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class JmsReceiveRoute extends RouteBuilder {
   private final ConnectionFactory connectionFactory;
   private final PlatformTransactionManager globalPlatformTransactionManager;
-  private final AgroalDataSource dataSource;
 
   public JmsReceiveRoute(
       @SuppressWarnings("CdiInjectionPointsInspection") ConnectionFactory connectionFactory,
 
       @Named(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
-      PlatformTransactionManager globalPlatformTransactionManager,
-
-      @SuppressWarnings("CdiInjectionPointsInspection")
-      @DataSource("data")
-      AgroalDataSource dataSource) {
+      PlatformTransactionManager globalPlatformTransactionManager) {
     this.connectionFactory = connectionFactory;
     this.globalPlatformTransactionManager = globalPlatformTransactionManager;
-    this.dataSource = dataSource;
   }
 
   @Override
@@ -50,9 +42,12 @@ public class JmsReceiveRoute extends RouteBuilder {
             List.of(Throwable.class)))
         .routeId("message-receiver")
         .log(LoggingLevel.INFO, "Received: ${body}")
-        .to(sql("INSERT INTO data(data) VALUES(:#${body});")
-            .dataSource(dataSource))
-        .log(LoggingLevel.INFO, "Inserted: ${body}");
+        .setHeader("number", body())
+        .setBody(simple("INSERT INTO data(data) VALUES(:?number);"))
+        .to(jdbc("data")
+            .resetAutoCommit(false)
+            .useHeadersAsParameters(true))
+        .log(LoggingLevel.INFO, "Inserted: ${header.number}");
     // @formatter:on
   }
 }
