@@ -38,11 +38,12 @@ public class JmsReceiveRoute extends RouteBuilder {
 
   @Override
   public void configure() {
+    errorHandler(jtaTransactionErrorHandler());
     final ThrottlingExceptionRoutePolicy policy = new ThrottlingExceptionRoutePolicy(
         1,
         Duration.ofSeconds(1).toMillis(),
         Duration.ofSeconds(10).toMillis(),
-        List.of(MyException.class));
+        List.of(Throwable.class));
     // @formatter:off
     policy.start();
     from(jms("queue:numbers")
@@ -58,7 +59,7 @@ public class JmsReceiveRoute extends RouteBuilder {
         .log(LoggingLevel.INFO, "Received: ${body}")
         .to(sql("INSERT INTO data(data) VALUES(:#${body});")
             .dataSource(dataSource))
-//        .throwException(new MyException())
+        .throwException(new MyException())
         .log(LoggingLevel.INFO, "Inserted: ${body}");
     // @formatter:on
   }
