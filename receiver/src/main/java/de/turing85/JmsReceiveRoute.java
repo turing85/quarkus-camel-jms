@@ -1,8 +1,5 @@
 package de.turing85;
 
-import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.jdbc;
-import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.jms;
-
 import java.time.Duration;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -13,13 +10,15 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.throttling.ThrottlingExceptionRoutePolicy;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.*;
+
 @ApplicationScoped
 public class JmsReceiveRoute extends RouteBuilder {
   private final ConnectionFactory connectionFactory;
   private final PlatformTransactionManager globalPlatformTransactionManager;
 
   public JmsReceiveRoute(
-      @SuppressWarnings("CdiInjectionPointsInspection") ConnectionFactory connectionFactory,
+      ConnectionFactory connectionFactory,
 
       @Named(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
       PlatformTransactionManager globalPlatformTransactionManager) {
@@ -30,9 +29,10 @@ public class JmsReceiveRoute extends RouteBuilder {
   @Override
   public void configure() {
     // @formatter:off
-    from(jms("queue:numbers")
+    from(amqp("queue:numbers")
             .connectionFactory(connectionFactory)
             .clientId("camel-receiver")
+            .cacheLevelName("CACHE_NONE")
             .advanced()
                 .transactionManager(globalPlatformTransactionManager))
         .routePolicy(new ThrottlingExceptionRoutePolicy(

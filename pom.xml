@@ -30,7 +30,7 @@
         <!-- Quarkus -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.13.0.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.13.3.Final</quarkus.platform.version>
         <quarkus.package.type>fast-jar</quarkus.package.type>
 
         <!-- Camel Quarkus -->
@@ -40,7 +40,7 @@
 
         <!-- Quarkiverse -->
         <quarkus-artemis-jms.version>1.2.0</quarkus-artemis-jms.version>
-        <quarkus-pooled-jms.version>1.0.2</quarkus-pooled-jms.version>
+        <quarkus-qpid-jms.version>1.0.3</quarkus-qpid-jms.version>
     </properties>
     <build>
         <pluginManagement>
@@ -154,17 +154,6 @@
         <dependency>
             <groupId>org.apache.camel.quarkus</groupId>
             <artifactId>camel-quarkus-microprofile-metrics</artifactId>
-        </dependency>
-
-        <!-- JMS Setup -->
-        <dependency>
-            <groupId>io.quarkiverse.artemis</groupId>
-            <artifactId>quarkus-artemis-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.messaginghub</groupId>
-            <artifactId>quarkus-pooled-jms</artifactId>
-            <version>${quarkus-pooled-jms.version}</version>
         </dependency>
 
         <!-- Camel modules -->

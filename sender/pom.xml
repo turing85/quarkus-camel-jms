@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>sender</artifactId>
-    <name>Quarkus Camel JMS :: Receiver</name>
+    <name>Quarkus Camel JMS :: Sender</name>
 
     <build>
         <plugins>
@@ -23,6 +23,17 @@
     </build>
 
     <dependencies>
+        <!-- JMS Setup -->
+        <dependency>
+            <groupId>io.quarkiverse.artemis</groupId>
+            <artifactId>quarkus-artemis-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.messaginghub</groupId>
+            <artifactId>quarkus-pooled-jms</artifactId>
+            <version>${quarkus-pooled-jms.version}</version>
+        </dependency>
+
         <!-- Camel modules -->
         <dependency>
             <groupId>${camel-quarkus.group-id}</groupId>

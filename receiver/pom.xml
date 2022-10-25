@@ -28,7 +28,6 @@
 
     <dependencies>
         <!-- Quarkus -->
-        <!-- Quarkus -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
@@ -39,6 +38,10 @@
         </dependency>
 
         <!-- Camel Quarkus -->
+        <dependency>
+            <groupId>org.apache.camel.quarkus</groupId>
+            <artifactId>camel-quarkus-amqp</artifactId>
+        </dependency>
         <dependency>
             <groupId>${camel-quarkus.group-id}</groupId>
             <artifactId>camel-quarkus-jdbc</artifactId>
