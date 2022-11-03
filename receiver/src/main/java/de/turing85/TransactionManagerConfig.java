@@ -3,9 +3,10 @@ package de.turing85;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
-import javax.inject.Named;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
+
+import io.smallrye.common.annotation.Identifier;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
@@ -16,7 +17,7 @@ public class TransactionManagerConfig {
 
   @Produces
   @ApplicationScoped
-  @Named(GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
+  @Identifier(GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
   public PlatformTransactionManager globalPlatformTransactionManager(
       UserTransaction userTransaction,
       @SuppressWarnings("CdiInjectionPointsInspection") TransactionManager transactionManager) {

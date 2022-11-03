@@ -3,8 +3,9 @@ package de.turing85;
 import java.time.Duration;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import javax.jms.ConnectionFactory;
+
+import io.smallrye.common.annotation.Identifier;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.throttling.ThrottlingExceptionRoutePolicy;
@@ -18,9 +19,11 @@ public class JmsReceiveRoute extends RouteBuilder {
   private final PlatformTransactionManager globalPlatformTransactionManager;
 
   public JmsReceiveRoute(
+      @SuppressWarnings("CdiInjectionPointsInspection")
+      @Identifier("receiver")
       ConnectionFactory connectionFactory,
 
-      @Named(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
+      @Identifier(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
       PlatformTransactionManager globalPlatformTransactionManager) {
     this.connectionFactory = connectionFactory;
     this.globalPlatformTransactionManager = globalPlatformTransactionManager;
@@ -29,12 +32,12 @@ public class JmsReceiveRoute extends RouteBuilder {
   @Override
   public void configure() {
     // @formatter:off
-    from(amqp("queue:numbers")
-            .connectionFactory(connectionFactory)
-            .clientId("camel-receiver")
-            .cacheLevelName("CACHE_NONE")
-            .advanced()
-                .transactionManager(globalPlatformTransactionManager))
+    from(jms("queue:numbers")
+        .connectionFactory(connectionFactory)
+        .clientId("camel-receiver")
+        .cacheLevelName("CACHE_NONE")
+        .advanced()
+        .transactionManager(globalPlatformTransactionManager))
         .routePolicy(new ThrottlingExceptionRoutePolicy(
             1,
             Duration.ofSeconds(1).toMillis(),

@@ -4,14 +4,12 @@ camel:
 quarkus:
   application:
     name: jms-receiver
-  qpid-jms:
-    url: amqp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
-    username: ${ARTEMIS_USERNAME:artemis}
-    password: ${ARTEMIS_PASSWORD:artemis}
+  artemis:
+    receiver:
+      url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
+      username: ${ARTEMIS_USERNAME:artemis}
+      password: ${ARTEMIS_PASSWORD:artemis}
   datasource:
-    db-kind: postgresql
-    devservices:
-      enabled: false
     data:
       db-kind: postgresql
       username: ${DB_USERNAME:postgres}
@@ -26,3 +24,11 @@ quarkus:
       migrate-at-start: true
   http:
     port: 8081
+  pooled-jms:
+    pooling:
+      enabled: true
+    max-connections: 2
+    xa:
+      enabled: true
+  transaction-manager:
+    enable-recovery: true

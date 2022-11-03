@@ -6,6 +6,9 @@ import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.timer;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
+import javax.jms.ConnectionFactory;
+
+import io.smallrye.common.annotation.Identifier;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -16,8 +19,16 @@ public class JmsSendRoute extends RouteBuilder {
 
   private final Duration period;
   private final AtomicInteger counter;
+  private final ConnectionFactory connectionFactory;
 
-  public JmsSendRoute(@ConfigProperty(name = "camel.send-route.period") Duration period) {
+  public JmsSendRoute(
+      @SuppressWarnings("CdiInjectionPointsInspection")
+      @Identifier("sender")
+      ConnectionFactory connectionFactory,
+
+      @ConfigProperty(name = "camel.send-route.period")
+      Duration period) {
+    this.connectionFactory = connectionFactory;
     this.period = period;
     this.counter = new AtomicInteger();
   }
@@ -34,6 +45,7 @@ public class JmsSendRoute extends RouteBuilder {
         .setHeader(COUNTER_HEADER_NAME, body().getExpression())
         .log(LoggingLevel.INFO, "Body: ${body}")
         .to(jms("queue:numbers")
+            .connectionFactory(connectionFactory)
             .clientId("camel-sender"))
         .log("Sent: ${body}");
     // @formatter:on

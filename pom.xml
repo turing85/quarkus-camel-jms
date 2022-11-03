@@ -39,8 +39,8 @@
         <quarkus-camel-platform.artifact-id>quarkus-camel-bom</quarkus-camel-platform.artifact-id>
 
         <!-- Quarkiverse -->
-        <quarkus-artemis-jms.version>1.2.0</quarkus-artemis-jms.version>
-        <quarkus-qpid-jms.version>1.0.3</quarkus-qpid-jms.version>
+        <quarkus-artemis-jms.version>2.0.1</quarkus-artemis-jms.version>
+        <quarkus-pooled-jms.version>1.0.3</quarkus-pooled-jms.version>
     </properties>
     <build>
         <pluginManagement>
@@ -114,6 +114,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Quarkus BOM -->
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>${quarkus.platform.artifact-id}</artifactId>
@@ -121,6 +122,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- Camel Quarkus BOM -->
+            <dependency>
+                <groupId>${camel-quarkus-platform.group-id}</groupId>
+                <artifactId>${quarkus-camel-platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Qarkiverse Artemis BOM -->
             <dependency>
                 <groupId>io.quarkiverse.artemis</groupId>
                 <artifactId>quarkus-artemis-bom</artifactId>
@@ -128,12 +138,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- Quarkiverse Pooled-JMS BOM -->
             <dependency>
-                <groupId>${camel-quarkus-platform.group-id}</groupId>
-                <artifactId>${quarkus-camel-platform.artifact-id}</artifactId>
-                <version>${quarkus.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>io.quarkiverse.messaginghub</groupId>
+                <artifactId>quarkus-pooled-jms</artifactId>
+                <version>${quarkus-pooled-jms.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -160,10 +169,6 @@
         <dependency>
             <groupId>${camel-quarkus.group-id}</groupId>
             <artifactId>camel-quarkus-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${camel-quarkus.group-id}</groupId>
-            <artifactId>camel-quarkus-jta</artifactId>
         </dependency>
         <dependency>
             <groupId>${camel-quarkus.group-id}</groupId>
