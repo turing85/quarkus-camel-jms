@@ -39,7 +39,7 @@
         <quarkus-camel-platform.artifact-id>quarkus-camel-bom</quarkus-camel-platform.artifact-id>
 
         <!-- Quarkiverse -->
-        <quarkus-artemis-jms.version>2.0.1</quarkus-artemis-jms.version>
+        <quarkus-artemis-jms.version>1.3.0</quarkus-artemis-jms.version>
         <quarkus-pooled-jms.version>1.0.3</quarkus-pooled-jms.version>
     </properties>
     <build>

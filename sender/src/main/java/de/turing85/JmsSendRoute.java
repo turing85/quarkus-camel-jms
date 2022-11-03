@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.jms.ConnectionFactory;
 
-import io.smallrye.common.annotation.Identifier;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -23,7 +22,6 @@ public class JmsSendRoute extends RouteBuilder {
 
   public JmsSendRoute(
       @SuppressWarnings("CdiInjectionPointsInspection")
-      @Identifier("sender")
       ConnectionFactory connectionFactory,
 
       @ConfigProperty(name = "camel.send-route.period")
