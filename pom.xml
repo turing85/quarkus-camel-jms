@@ -40,7 +40,7 @@
 
         <!-- Quarkiverse -->
         <quarkus-artemis-jms.version>2.0.1</quarkus-artemis-jms.version>
-        <quarkus-pooled-jms.version>1.0.3</quarkus-pooled-jms.version>
+        <quarkus-pooled-jms.version>1.0.6</quarkus-pooled-jms.version>
     </properties>
     <build>
         <pluginManagement>

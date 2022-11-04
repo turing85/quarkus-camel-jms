@@ -32,10 +32,6 @@
             <groupId>io.quarkiverse.messaginghub</groupId>
             <artifactId>quarkus-pooled-jms</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-narayana-jta</artifactId>
-        </dependency>
 
         <!-- Camel modules -->
         <dependency>
