@@ -14,21 +14,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @ApplicationScoped
 public class JmsReceiveRoute extends RouteBuilder {
-  private final PlatformTransactionManager globalPlatformTransactionManager;
-
-  public JmsReceiveRoute(
-      @Named(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
-      PlatformTransactionManager globalPlatformTransactionManager) {
-    this.globalPlatformTransactionManager = globalPlatformTransactionManager;
-  }
 
   @Override
   public void configure() {
     // @formatter:off
-    from(jms("queue:numbers")
-            .clientId("camel-receiver")
-            .advanced()
-                .transactionManager(globalPlatformTransactionManager))
+    from(
+        jms("queue:numbers")
+            .clientId("camel-receiver"))
         .routePolicy(new ThrottlingExceptionRoutePolicy(
             1,
             Duration.ofSeconds(1).toMillis(),
