@@ -19,13 +19,6 @@ quarkus:
     xa:
       enabled: true
 
-"%dev":
-  quarkus:
-    artemis:
-      url: tcp://dev:123456
-      username: baz
-      password: bang
-
 "%test":
   quarkus:
     artemis:
