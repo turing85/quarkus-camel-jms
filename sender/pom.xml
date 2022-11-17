@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>sender</artifactId>
-    <name>Quarkus Camel JMS :: Receiver</name>
+    <name>Quarkus Camel JMS :: Sender</name>
 
     <build>
         <plugins>

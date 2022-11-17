@@ -4,6 +4,8 @@ camel:
   send-route:
     period: PT5S
 quarkus:
+  package:
+    type: uber-jar
   application:
     name: jms-sender
   artemis:
@@ -16,3 +18,17 @@ quarkus:
     max-connections: 2
     xa:
       enabled: true
+
+"%dev":
+  quarkus:
+    artemis:
+      url: tcp://dev:123456
+      username: baz
+      password: bang
+
+"%test":
+  quarkus:
+    artemis:
+      url: tcp://test:123456
+      username: foo
+      password: bar
