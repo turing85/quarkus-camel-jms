@@ -1,5 +1,4 @@
-# 1.0
-FROM quay.io/quarkus/quarkus-micro-image:2.0@sha256:bc172982173253eebcc9483c3fc092d6272e79b97273a201a197738cd1bcaf75
+FROM quay.io/quarkus/quarkus-distroless-image:2.0@sha256:28d0f7ad578426ea434c09394eef7d46e3b7b106ded9438477224367995e244a
 ARG APP_DIR=/deployment
 ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en"
 

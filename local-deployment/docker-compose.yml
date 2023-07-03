@@ -80,7 +80,7 @@ services:
       - native-services
     build:
       context: ../sender
-      dockerfile: ../containerfiles/Containerfile.native
+      dockerfile: ../containerfiles/Containerfile.distroless-native
     container_name: sender
     tmpfs:
       - /deployment/ObjectStore
@@ -101,7 +101,7 @@ services:
       - native-services
     build:
       context: ../receiver
-      dockerfile: ../containerfiles/Containerfile.native
+      dockerfile: ../containerfiles/Containerfile.distroless-native
     container_name: receiver
     tmpfs:
       - /deployment/ObjectStore

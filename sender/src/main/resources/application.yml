@@ -16,6 +16,13 @@ quarkus:
     max-connections: 2
     transaction: disabled
 
+#"%prod":
+#  quarkus:
+#    artemis:
+#      url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
+#      username: ${ARTEMIS_USERNAME:artemis}
+#      password: ${ARTEMIS_PASSWORD:artemis}
+
 "%test":
   quarkus:
     artemis:

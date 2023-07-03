@@ -1,5 +1,5 @@
 # Source: https://console.cloud.google.com/gcr/images/distroless/global/java17
-FROM gcr.io/distroless/java17@sha256:3a4ea21bd7b412b8b6ae61313b39337d8f03bb6844013810e8e4625d8c765edb
+FROM gcr.io/distroless/java17:nonroot@sha256:3a4ea21bd7b412b8b6ae61313b39337d8f03bb6844013810e8e4625d8c765edb
 ARG APP_DIR=/deployment
 ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en"
 
