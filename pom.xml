@@ -22,7 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Plugins -->
-        <antrun-plugin.version>3.1.0</antrun-plugin.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
         <flyway-plugin.version>8.4.4</flyway-plugin.version>
@@ -47,25 +46,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>${antrun-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>create-emptydir</id>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <phase>package</phase>
-                            <configuration>
-                                <target>
-                                    <mkdir dir="${project.build.directory}/emptydir"/>
-                                </target>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>org.flywaydb</groupId>
                     <artifactId>flyway-maven-plugin</artifactId>
