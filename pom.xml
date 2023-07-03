@@ -30,7 +30,7 @@
         <!-- Quarkus -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>2.16.7.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.13.8.Final</quarkus.platform.version>
         <quarkus.native.builder-image>quay.io/quarkus/ubi-quarkus-mandrel-builder-image:22.3.2.1-Final-java17@sha256:720ea335a0cda883b64d4225672455ee6320f3c5a8c1d14a683a1b9b3c75b6f8</quarkus.native.builder-image>
         <quarkus.native.container-build>true</quarkus.native.container-build>
         <quarkus.package.type>fast-jar</quarkus.package.type>
