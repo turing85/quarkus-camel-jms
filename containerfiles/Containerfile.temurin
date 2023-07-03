@@ -1,0 +1,21 @@
+FROM docker.io/eclipse-temurin:17.0.7_7-jre-alpine@sha256:dd8238c151293ae6a7c22898ef2f0df2af8a05786aef73ccd3248e73765969ed
+ARG APP_DIR=/deployment
+ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en"
+
+WORKDIR ${APP_DIR}
+COPY \
+  --chmod=555 \
+  target/quarkus-app/lib/ ${APP_DIR}/lib/
+COPY \
+  --chmod=444 \
+  target/quarkus-app/*.jar ${APP_DIR}/
+COPY \
+  --chmod=555 \
+  target/quarkus-app/app/ ${APP_DIR}/app/
+COPY \
+  --chmod=555 \
+  target/quarkus-app/quarkus/ ${APP_DIR}/quarkus/
+
+USER 185
+ENTRYPOINT [ "java", "-jar", "quarkus-run.jar" ]
+

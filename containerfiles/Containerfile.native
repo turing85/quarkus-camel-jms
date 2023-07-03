@@ -1,0 +1,12 @@
+# 1.0
+FROM quay.io/quarkus/quarkus-micro-image:2.0@sha256:bc172982173253eebcc9483c3fc092d6272e79b97273a201a197738cd1bcaf75
+ARG APP_DIR=/deployment
+ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en"
+
+WORKDIR ${APP_DIR}
+COPY \
+  --chown=185 \
+  target/*-runner ${APP_DIR}/quarkus-run
+
+USER 185
+ENTRYPOINT ["./quarkus-run", "-Dquarkus.http.host=0.0.0.0"]

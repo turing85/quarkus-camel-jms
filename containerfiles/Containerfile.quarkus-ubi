@@ -1,0 +1,20 @@
+FROM registry.access.redhat.com/ubi8/openjdk-17@sha256:eea016e9e3d7da20822d7e62ab6566a5b2084c73f598b8379cec977dd08fbf65
+ARG APP_DIR=/deployment
+ENV LANG="en_US.UTF-8" LANGUAGE="en_US:en"
+
+WORKDIR ${APP_DIR}
+COPY \
+  --chmod=555 \
+  target/quarkus-app/lib/ ${APP_DIR}/lib/
+COPY \
+  --chmod=444 \
+  target/quarkus-app/*.jar ${APP_DIR}/
+COPY \
+  --chmod=555 \
+  target/quarkus-app/app/ ${APP_DIR}/app/
+COPY \
+  --chmod=555 \
+  target/quarkus-app/quarkus/ ${APP_DIR}/quarkus/
+
+USER 185
+ENTRYPOINT [ "java", "-jar", "quarkus-run.jar" ]

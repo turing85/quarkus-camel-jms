@@ -34,17 +34,8 @@
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
         <dependency>
-            <groupId>${quarkus.platform.group-id}</groupId>
+            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-flyway</artifactId>
-        </dependency>
-        <!-- JMS -->
-        <dependency>
-            <groupId>io.quarkiverse.artemis</groupId>
-            <artifactId>quarkus-artemis-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.messaginghub</groupId>
-            <artifactId>quarkus-pooled-jms</artifactId>
         </dependency>
 
         <!-- Camel Quarkus -->

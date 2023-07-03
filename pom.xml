@@ -29,8 +29,8 @@
 
         <!-- Quarkus -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>2.13.3.Final</quarkus.platform.version>
+        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+        <quarkus.platform.version>2.16.7.Final</quarkus.platform.version>
         <quarkus.package.type>fast-jar</quarkus.package.type>
 
         <!-- Camel Quarkus -->
@@ -39,8 +39,8 @@
         <quarkus-camel-platform.artifact-id>quarkus-camel-bom</quarkus-camel-platform.artifact-id>
 
         <!-- Quarkiverse -->
-        <quarkus-artemis-jms.version>2.0.1</quarkus-artemis-jms.version>
-        <quarkus-pooled-jms.version>1.0.6</quarkus-pooled-jms.version>
+        <quarkus-artemis-jms.version>2.1.1</quarkus-artemis-jms.version>
+        <quarkus-pooled-jms.version>1.1.2</quarkus-pooled-jms.version>
     </properties>
     <build>
         <pluginManagement>
@@ -114,7 +114,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Quarkus BOM -->
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>${quarkus.platform.artifact-id}</artifactId>
@@ -122,15 +121,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- Camel Quarkus BOM -->
-            <dependency>
-                <groupId>${camel-quarkus-platform.group-id}</groupId>
-                <artifactId>${quarkus-camel-platform.artifact-id}</artifactId>
-                <version>${quarkus.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- Qarkiverse Artemis BOM -->
             <dependency>
                 <groupId>io.quarkiverse.artemis</groupId>
                 <artifactId>quarkus-artemis-bom</artifactId>
@@ -138,11 +128,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- Quarkiverse Pooled-JMS BOM -->
             <dependency>
-                <groupId>io.quarkiverse.messaginghub</groupId>
-                <artifactId>quarkus-pooled-jms</artifactId>
-                <version>${quarkus-pooled-jms.version}</version>
+                <groupId>${camel-quarkus-platform.group-id}</groupId>
+                <artifactId>${quarkus-camel-platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -163,6 +154,17 @@
         <dependency>
             <groupId>org.apache.camel.quarkus</groupId>
             <artifactId>camel-quarkus-microprofile-metrics</artifactId>
+        </dependency>
+
+        <!-- JMS Setup -->
+        <dependency>
+            <groupId>io.quarkiverse.artemis</groupId>
+            <artifactId>quarkus-artemis-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.messaginghub</groupId>
+            <artifactId>quarkus-pooled-jms</artifactId>
+            <version>${quarkus-pooled-jms.version}</version>
         </dependency>
 
         <!-- Camel modules -->

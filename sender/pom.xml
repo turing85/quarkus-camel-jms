@@ -23,16 +23,6 @@
     </build>
 
     <dependencies>
-        <!-- JMS Setup -->
-        <dependency>
-            <groupId>io.quarkiverse.artemis</groupId>
-            <artifactId>quarkus-artemis-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.messaginghub</groupId>
-            <artifactId>quarkus-pooled-jms</artifactId>
-        </dependency>
-
         <!-- Camel modules -->
         <dependency>
             <groupId>${camel-quarkus.group-id}</groupId>

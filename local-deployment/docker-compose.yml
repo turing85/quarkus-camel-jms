@@ -4,6 +4,7 @@ services:
   # postgres + pgadmin4 web UI
   postgres:
     image: postgres:14.1-alpine@sha256:884c142deb4a141f67489c807534ec6139f13b9a6432d2f87a4de283aaec0b5c
+    container_name: postgres
     volumes:
       - ${REMOTE_PROJECT_PATH:-.}/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/:ro
     environment:
@@ -19,6 +20,7 @@ services:
   # apache activemq-artemis
   artemis:
     image: vromero/activemq-artemis:2.16.0-alpine@sha256:2621ab238411031e364cc219c621f20a6613efc3a91b43c85148e8872e6b3163
+    container_name: artemis
     volumes:
       - ${REMOTE_PROJECT_PATH:-.}/artemis/var/lib/artemis/etc-override:/var/lib/artemis/etc-override/:ro
     ports:
@@ -34,7 +36,10 @@ services:
       - services
     build:
       context: ../sender
-      dockerfile: ../dockerfiles/Dockerfile.distroless
+      dockerfile: ../containerfiles/Containerfile.temurin
+    container_name: sender
+    tmpfs:
+      - /deployment/ObjectStore
     ports:
       - "8080:8080"
     env_file: services/sender/.env
@@ -52,10 +57,57 @@ services:
       - services
     build:
       context: ../receiver
-      dockerfile: ../dockerfiles/Dockerfile.distroless
+      dockerfile: ../containerfiles/Containerfile.temurin
+    container_name: receiver
+    tmpfs:
+      - /deployment/ObjectStore
+    ports:
+      - "8081:8080"
+    env_file: services/receiver/.env
+    deploy:
+      resources:
+        limits:
+          memory: 80m
+        reservations:
+          memory: 100m
+    depends_on:
+      - artemis
+      - postgres
+
+
+  native-sender:
+    profiles:
+      - native-services
+    build:
+      context: ../sender
+      dockerfile: ../containerfiles/Containerfile.native
+    container_name: sender
+    tmpfs:
+      - /deployment/ObjectStore
     ports:
       - "8080:8080"
     env_file: services/sender/.env
+    deploy:
+      resources:
+        limits:
+          memory: 80m
+        reservations:
+          memory: 100m
+    depends_on:
+      - artemis
+      - postgres
+  native-receiver:
+    profiles:
+      - native-services
+    build:
+      context: ../receiver
+      dockerfile: ../containerfiles/Containerfile.native
+    container_name: receiver
+    tmpfs:
+      - /deployment/ObjectStore
+    ports:
+      - "8081:8080"
+    env_file: services/receiver/.env
     deploy:
       resources:
         limits:

@@ -7,11 +7,18 @@ quarkus:
   application:
     name: jms-sender
   artemis:
-    sender:
-      url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
-      username: ${ARTEMIS_USERNAME:artemis}
-      password: ${ARTEMIS_PASSWORD:artemis}
+    url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
+    username: ${ARTEMIS_USERNAME:artemis}
+    password: ${ARTEMIS_PASSWORD:artemis}
   pooled-jms:
     pooling:
       enabled: true
     max-connections: 2
+    transaction: disabled
+
+"%test":
+  quarkus:
+    artemis:
+      url: tcp://test:123456
+      username: foo
+      password: bar

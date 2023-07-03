@@ -5,15 +5,17 @@ quarkus:
   application:
     name: jms-receiver
   artemis:
-    receiver:
-      url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
-      username: ${ARTEMIS_USERNAME:artemis}
-      password: ${ARTEMIS_PASSWORD:artemis}
+    url: tcp://${ARTEMIS_HOST:localhost}:${ARTEMIS_PORT:61616}
+    username: ${ARTEMIS_USERNAME:artemis}
+    password: ${ARTEMIS_PASSWORD:artemis}
   datasource:
+    db-kind: postgresql
+    devservices:
+      enabled: false
     data:
       db-kind: postgresql
-      username: ${DB_USERNAME:postgres}
-      password: ${DB_PASSWORD:postgres}
+      username: ${DB_USERNAME:application}
+      password: ${DB_PASSWORD:application}
       jdbc:
         url: jdbc:postgresql://${DB_HOST:localhost:5432}/${DB_NAME:application}
         max-size: 4
@@ -28,7 +30,13 @@ quarkus:
     pooling:
       enabled: true
     max-connections: 2
-    xa:
-      enabled: true
+    transaction: xa
   transaction-manager:
     enable-recovery: true
+
+"%test":
+  quarkus:
+    artemis:
+      url: tcp://test:123456
+      username: foo
+      password: bar

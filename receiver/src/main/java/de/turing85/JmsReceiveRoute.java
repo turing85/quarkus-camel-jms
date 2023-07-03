@@ -20,7 +20,6 @@ public class JmsReceiveRoute extends RouteBuilder {
 
   public JmsReceiveRoute(
       @SuppressWarnings("CdiInjectionPointsInspection")
-      @Identifier("receiver")
       ConnectionFactory connectionFactory,
 
       @Identifier(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
