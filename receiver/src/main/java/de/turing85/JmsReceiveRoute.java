@@ -9,31 +9,49 @@ import io.smallrye.common.annotation.Identifier;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.throttling.ThrottlingExceptionRoutePolicy;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jboss.logging.Logger;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.*;
 
 @ApplicationScoped
 public class JmsReceiveRoute extends RouteBuilder {
+  private final Logger logger;
   private final ConnectionFactory connectionFactory;
   private final PlatformTransactionManager globalPlatformTransactionManager;
+  private final String clientId;
+  private final String subscriptionName;
 
   public JmsReceiveRoute(
+      Logger logger,
+
       @SuppressWarnings("CdiInjectionPointsInspection")
       ConnectionFactory connectionFactory,
 
       @Identifier(TransactionManagerConfig.GLOBAL_PLATFORM_TRANSACTION_MANAGER_NAME)
-      PlatformTransactionManager globalPlatformTransactionManager) {
+      PlatformTransactionManager globalPlatformTransactionManager,
+
+      @ConfigProperty(name = "app.client-id") String clientId,
+      @ConfigProperty(name = "app.subscription-name") String subscriptionName) {
+    this.logger = logger;
     this.connectionFactory = connectionFactory;
     this.globalPlatformTransactionManager = globalPlatformTransactionManager;
+    this.clientId = clientId;
+    this.subscriptionName = subscriptionName;
   }
 
   @Override
   public void configure() {
+    logger.infof("clientId = %s", clientId);
+    logger.infof("subscriptionName = %s", subscriptionName);
     // @formatter:off
-    from(jms("queue:numbers")
+    from(jms("topic:numbers")
         .connectionFactory(connectionFactory)
-        .clientId("camel-receiver")
+        .clientId(clientId)
+        .subscriptionShared(true)
+        .subscriptionDurable(true)
+        .subscriptionName(subscriptionName)
         .cacheLevelName("CACHE_NONE")
         .advanced()
         .transactionManager(globalPlatformTransactionManager))

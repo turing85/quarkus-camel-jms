@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-  # postgres + pgadmin4 web UI
+  # postgres
   postgres:
-    image: postgres:14.1-alpine@sha256:884c142deb4a141f67489c807534ec6139f13b9a6432d2f87a4de283aaec0b5c
+    image: docker.io/postgres:15.3-alpine3.18
     container_name: postgres
     volumes:
       - ${REMOTE_PROJECT_PATH:-.}/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/:ro
@@ -19,18 +19,17 @@ services:
 
   # apache activemq-artemis
   artemis:
-    image: vromero/activemq-artemis:2.16.0-alpine@sha256:2621ab238411031e364cc219c621f20a6613efc3a91b43c85148e8872e6b3163
+    image: quay.io/artemiscloud/activemq-artemis-broker:1.0.19
     container_name: artemis
-    volumes:
-      - ${REMOTE_PROJECT_PATH:-.}/artemis/var/lib/artemis/etc-override:/var/lib/artemis/etc-override/:ro
     ports:
       - "8161:8161"
       - "61616:61616"
       - "5672:5672"
     environment:
-      ARTEMIS_USERNAME: artemis
-      ARTEMIS_PASSWORD: artemis
-  #services
+      - AMQ_USER=artemis
+      - AMQ_PASSWORD=artemis
+      - AMQ_EXTRA_ARGS=--nio --relax-jolokia
+
   sender:
     profiles:
       - services
@@ -73,7 +72,6 @@ services:
     depends_on:
       - artemis
       - postgres
-
 
   native-sender:
     profiles:
